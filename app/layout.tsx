@@ -13,14 +13,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  // If NEXT_PUBLIC_URL is not set in the environment, fallback to "http://localhost:3000" as default.
-  // This prevents errors when .env is missing or not configured.
-  // Consider adding a note in the README to remind users to set NEXT_PUBLIC_URL for production.
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_URL && process.env.NEXT_PUBLIC_URL.trim() !== ""
-      ? process.env.NEXT_PUBLIC_URL
-      : "http://localhost:3000"
-  ),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL!),
   alternates: {
     canonical: "/",
     languages: {

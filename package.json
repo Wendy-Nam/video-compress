@@ -31,24 +31,27 @@
     "build": "next build",
     "start": "next start ",
     "lint": "next lint",
-    "electron-server-start": "next start -p $PORT",
     "electron": "electron .",
+    "electron:dev": "next build && electron .",
     "dist": "next build && electron-builder"
   },
+  "asarUnpack": [
+    ".next"
+  ],
   "build": {
     "appId": "com.yourdomain.videocompress",
-    "mac": {
-      "target": "dmg",
-      "icon": "public/launcher-icon.icns"
-    },
-    "asar": false,
     "files": [
       "electron/**/*",
       ".next/**/*",
-      "node_modules/**/*",
+      "public/**/*",
       "package.json",
-      "next.config.*"
-    ]
+      "node_modules/**/*"
+    ],
+    "asar": false,
+    "mac": {
+      "target": "dmg",
+      "icon": "public/launcher-icon.icns"
+    }
   },
   "dependencies": {
     "@ffmpeg/ffmpeg": "^0.12.10",
