@@ -29,28 +29,75 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start ",
+    "start": "next start",
     "lint": "next lint",
     "electron": "electron .",
     "electron:dev": "next build && electron .",
-    "dist": "next build && electron-builder"
+    "electron:build": "next build && electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
-  "asarUnpack": [
-    ".next"
-  ],
   "build": {
-    "appId": "com.yourdomain.videocompress",
+    "appId": "sh.prolab.videocompress",
+    "productName": "Video Compress",
+    "directories": {
+      "output": "dist"
+    },
     "files": [
       "electron/**/*",
-      ".next/**/*",
+      "out/**/*",
       "public/**/*",
+      "!public/demo.webm",
+      "!public/banner.jpeg",
+      "!public/banner.png", 
       "package.json",
-      "node_modules/**/*"
+      "!node_modules/**/*",
+      "!*.log",
+      "!.next/**/*",
+      "!.git/**/*",
+      "!dist/**/*",
+      "!docs/**/*",
+      "!*.md"
     ],
-    "asar": false,
+    "asar": {
+      "smartUnpack": false
+    },
+    "compression": "maximum",
+    "asarUnpack": [
+      "out/_next/static/**/*",
+      "out/download/**/*"
+    ],
     "mac": {
-      "target": "dmg",
-      "icon": "public/launcher-icon.icns"
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["arm64", "x64"]
+        }
+      ],
+      "icon": "public/launcher-icon.icns",
+      "category": "public.app-category.video"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        }
+      ],
+      "icon": "public/launcher-icon.ico"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "public/launcher-icon.png",
+      "category": "AudioVideo"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   },
   "dependencies": {
