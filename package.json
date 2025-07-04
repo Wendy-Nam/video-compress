@@ -1,6 +1,6 @@
 {
   "name": "video-compression",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Compress Videos for Free. Forever. Say goodbye to bulky files! Crush video sizes by 90% with no quality loss, even offline. And the best part? It's free!",
   "author": {
@@ -71,6 +71,10 @@
         {
           "target": "dmg",
           "arch": ["arm64", "x64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["arm64", "x64"]
         }
       ],
       "icon": "public/launcher-icon.icns",
@@ -80,7 +84,11 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64", "ia32"]
+          "arch": ["x64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64"]
         }
       ],
       "icon": "public/launcher-icon.ico"
@@ -89,6 +97,10 @@
       "target": [
         {
           "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "deb",
           "arch": ["x64"]
         }
       ],
