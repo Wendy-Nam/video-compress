@@ -1,33 +1,42 @@
 import { VideoFormats, VideoInputSettings } from "~/types";
 import { getFileExtension } from "./convert";
+import { getOptimalThreadCount, getRecommendedPreset, getPlatformOptimizations } from "./systemInfo";
 
-export const twitterCompressionCommand = (input: string, output: string) => [
-  "-i",
-  input,
-  "-c:v",
-  "libx264",
-  "-profile:v",
-  "high",
-  "-level:v",
-  "4.2",
-  "-pix_fmt",
-  "yuv420p",
-  "-c:a",
-  "aac",
-  "-b:a",
-  "192k",
-  "-movflags",
-  "faststart",
-  "-r",
-  "30",
-  "-maxrate",
-  "5000k",
-  "-bufsize",
-  "5000k",
-  "-tune",
-  "film",
-  output,
-];
+export const twitterCompressionCommand = (input: string, output: string) => {
+  const optimalThreads = getOptimalThreadCount();
+  
+  return [
+    "-i",
+    input,
+    "-c:v",
+    "libx264",
+    "-profile:v",
+    "high",
+    "-level:v",
+    "4.2",
+    "-pix_fmt",
+    "yuv420p",
+    "-c:a",
+    "aac",
+    "-b:a",
+    "192k",
+    "-movflags",
+    "faststart",
+    "-r",
+    "30",
+    "-maxrate",
+    "5000k",
+    "-bufsize",
+    "5000k",
+    "-preset",
+    "superfast", // Fastest practical setting
+    "-threads",
+    "0", // Use all CPU cores
+    "-crf",
+    "28", // Fast compression CRF
+    output,
+  ];
+};
 
 export const customVideoCompressionCommand = (
   input: string,
@@ -68,13 +77,17 @@ const getMp4ToMp4Command = (
     "-c:v",
     "libx264",
     "-crf",
-    "23",
+    "28", // Fast compression
     "-preset",
-    "medium",
+    "superfast", // Fastest practical setting
+    "-threads",
+    "0", // Use all CPU cores
     "-c:a",
     "aac",
     "-b:a",
     "128k",
+    "-movflags",
+    "faststart",
     output,
   ];
   return ffmpegCommand;
@@ -108,13 +121,18 @@ const getMKVCommand = (
   videoSettings: VideoInputSettings
 ): string[] => {
   const audioOptions = videoSettings.removeAudio ? [] : ["-c:a", "aac"];
+  
   return [
     "-i",
     input,
     "-c:v",
     "libx264",
     "-crf",
-    videoSettings.quality,
+    "28", // Fast compression
+    "-preset",
+    "superfast", // Fastest practical setting
+    "-threads",
+    "0", // Use all CPU cores
     ...audioOptions,
     "-vf",
     `trim=start=${videoSettings.customStartTime}:end=${videoSettings.customEndTime}`,
@@ -128,13 +146,18 @@ const getAVICommand = (
   videoSettings: VideoInputSettings
 ): string[] => {
   const audioOptions = videoSettings.removeAudio ? [] : ["-c:a", "mp3"];
+  
   return [
     "-i",
     input,
     "-c:v",
     "libx264",
     "-crf",
-    videoSettings.quality,
+    "28", // Fast compression
+    "-preset",
+    "superfast", // Fastest practical setting
+    "-threads",
+    "0", // Use all CPU cores
     ...audioOptions,
     "-vf",
     `trim=start=${videoSettings.customStartTime}:end=${videoSettings.customEndTime}`,
@@ -148,13 +171,18 @@ const getFLVCommand = (
   videoSettings: VideoInputSettings
 ): string[] => {
   const audioOptions = videoSettings.removeAudio ? [] : ["-c:a", "aac"];
+  
   return [
     "-i",
     input,
     "-c:v",
     "libx264",
     "-crf",
-    videoSettings.quality,
+    "28", // Fast compression
+    "-preset",
+    "superfast", // Fastest practical setting
+    "-threads",
+    "0", // Use all CPU cores
     ...audioOptions,
     "-vf",
     `trim=start=${videoSettings.customStartTime}:end=${videoSettings.customEndTime}`,
@@ -168,13 +196,18 @@ const getMOVCommand = (
   videoSettings: VideoInputSettings
 ): string[] => {
   const audioOptions = videoSettings.removeAudio ? [] : ["-c:a", "aac"];
+  
   return [
     "-i",
     input,
     "-c:v",
     "libx264",
     "-crf",
-    videoSettings.quality,
+    "28", // Fast compression
+    "-preset",
+    "superfast", // Fastest practical setting
+    "-threads",
+    "0", // Use all CPU cores
     ...audioOptions,
     "-vf",
     `trim=start=${videoSettings.customStartTime}:end=${videoSettings.customEndTime}`,
@@ -204,8 +237,6 @@ const getMp4Command = (
     "5000k",
     "-bufsize",
     "5000k",
-    "-tune",
-    "film",
     "-ss",
     videoSettings.customStartTime.toString(),
     "-to",
@@ -215,9 +246,11 @@ const getMp4Command = (
     "-c:v",
     "libx264",
     "-crf",
-    "18",
+    "28", // Fast compression
     "-preset",
-    "medium",
+    "superfast", // Fastest practical setting
+    "-threads",
+    "0", // Use all CPU cores
     "-f",
     videoSettings.videoType,
   ];
